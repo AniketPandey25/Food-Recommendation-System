@@ -15,20 +15,28 @@ app.config['MONGODB_SETTINGS'] = {
 db = MongoEngine()
 db.init_app(app)
 
-
+# Model class for dataset
 class Food(db.Document):
     name = db.StringField()
     cookTime = db.IntField()
     cuisine = db.StringField()
+    recipe = db.ListField(db.StringField())
     ingredients = db.ListField(db.StringField())
     image = db.StringField()
 
 
-@app.route("/api/v1/foods")
-def get_recommendation():
-    for food in get_food_from_csv()[:5]:
+# This method will execute once when
+# the app starts.This will load data
+# from the csv file to backend database.
+@app.before_first_request
+def load_data_into_database():
+    for food in get_food_from_csv():
         Food(**food).save()
-    return Response(Food.objects().to_json(), mimetype="application/json", status=200)
+
+
+@app.route("/api/v1/foods/search", methods=["GET"])
+def get_recommendation():
+    return Response(Food.objects()[:5].to_json(), mimetype="application/json", status=200)
 
 
 if __name__ == "__main__":
