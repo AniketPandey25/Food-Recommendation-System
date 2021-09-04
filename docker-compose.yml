@@ -1,0 +1,51 @@
+version: '3.7'
+services:
+   angular-client:
+      build:
+         context: angular-client
+      container_name: angular-client
+      ports:
+         - "8080:80"
+      networks:
+            - frontend
+      depends_on:
+            - python-backend
+   mongodb:
+        image: mongo
+        container_name: mongo-db
+        restart: always
+        command: mongod --auth
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: "AniketPandey"
+            MONGO_INITDB_ROOT_PASSWORD: "Aniket@19970925"
+            MONGODB_DATA_DIR: /data/db
+        volumes:
+            - mongodbdata:/data/db
+        networks:
+            - backend
+   python-backend:
+        build: 
+            context: python-service
+            dockerfile: Dockerfile
+        container_name: python-service
+        command: gunicorn --bind 0.0.0.0:5000 app:app
+        ports:
+            - "5000:5000"
+        environment:
+            MONGODB_HOST: mongodb
+            MONGODB_USERNAME: "AniketPandey"
+            MONGODB_PASSWORD: "Aniket@19970925"
+            MONGODB_DATABASE: "admin"
+        depends_on: 
+            - mongodb
+        networks:
+            - frontend
+            - backend
+networks:
+   frontend:
+      driver: bridge
+   backend:
+      driver: bridge
+volumes:
+    mongodbdata:
+        driver: local
