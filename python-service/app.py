@@ -1,8 +1,8 @@
 from http import HTTPStatus
 import os
-from flask import Flask, Response, request
+from flask import Flask, Response, request, jsonify
 from flask_mongoengine import MongoEngine
-from utility import get_food_from_csv
+from utility import get_food_from_csv, recommend
 
 app = Flask(__name__)
 
@@ -39,9 +39,16 @@ def load_data_into_database():
 # Search food recipe from the database
 # return five matches
 @app.route("/rest/v1/foods", methods=["GET"])
-def search():
+def handle_search():
     recipeName = request.args.get('search')
     return Response(status=HTTPStatus.NO_CONTENT) if recipeName is None or recipeName == '' else Response(response=Food.objects(name__icontains=recipeName)[:5].to_json(), mimetype="application/json", status=HTTPStatus.OK)
+
+
+# Recommend food recipe
+@app.route("/rest/v1/foods/<id>", methods=["GET"])
+def handle_recommend(id: str):
+    food = Food.objects.get(id=id)
+    return Response(status=HTTPStatus.NOT_FOUND) if not food else jsonify(recommend(food=food, foods=Food.objects.all()))
 
 
 if __name__ == "__main__":

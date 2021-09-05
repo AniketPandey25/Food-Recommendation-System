@@ -1,7 +1,23 @@
 import csv
-import json
+from difflib import SequenceMatcher
 
 DATASET = "dataset.csv"
+
+
+# Match percentage for two string
+def percentage_match(string1, string2):
+    return SequenceMatcher(isjunk=None, a=string1, b=string2).ratio()
+
+
+def join_ingredients(ingredients):
+    return " ".join(ingredients)
+
+
+# Recommend food recipe
+def recommend(food, foods):
+    return [
+        f for f in foods if percentage_match(food.name, f.name) >= 0.6 and percentage_match(join_ingredients(food.ingredients), join_ingredients(f.ingredients)) >= 0.5
+    ][:5]
 
 
 # Restructure data
