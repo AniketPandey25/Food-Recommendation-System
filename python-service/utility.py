@@ -1,7 +1,43 @@
+import os
 import csv
+import boto3
+import logging
+from botocore.exceptions import ClientError
 from difflib import SequenceMatcher
 
 DATASET = "dataset.csv"
+
+
+# Get client
+def get_client():
+    return boto3.client(
+        service_name="rekognition",
+        region_name="ap-south-1",
+        aws_access_key_id=os.environ['AWS_ACCESS_KEY_ID'],
+        aws_secret_access_key=os.environ['AWS_SECRET_ACCESS_KEY']
+    )
+
+
+# Use AWS Rekognition to find out emotion
+# for an image
+def get_faces_from_image(image):
+    with open(file=image, mode='rb') as image:
+        return get_client().detect_faces(
+            Image={
+                "Bytes": image.read()
+            }, Attributes=["ALL"]
+        )["FaceDetails"]
+
+
+# Check is person Sad
+def check_is_person_sad(image):
+    try:
+        for face in get_faces_from_image(image=image):
+            for emotion in face['Emotions']:
+                return emotion
+    except (ClientError, Exception) as e:
+        logging.error(e)
+        return None
 
 
 # Match percentage for two string

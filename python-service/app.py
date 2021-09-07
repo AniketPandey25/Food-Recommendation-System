@@ -2,7 +2,8 @@ from http import HTTPStatus
 import os
 from flask import Flask, Response, request, jsonify
 from flask_mongoengine import MongoEngine
-from utility import get_food_from_csv, recommend
+from utility import check_is_person_sad, get_food_from_csv, recommend
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
@@ -17,7 +18,7 @@ db = MongoEngine()
 db.init_app(app)
 
 
-# Model class for dataset
+# # Model class for dataset
 class Food(db.Document):
     name = db.StringField()
     cookTime = db.IntField()
@@ -49,6 +50,24 @@ def handle_search():
 def handle_recommend(id: str):
     food = Food.objects.get(id=id)
     return Response(status=HTTPStatus.NOT_FOUND) if not food else jsonify(recommend(food=food, foods=Food.objects.all()))
+
+
+@app.route("/rest/v1/upload", methods=["POST"])
+def handle_upload():
+    VALID_EXTENSION = ["jpg", "png"]
+    if request.files['file'].filename == '' or request.files['file'].filename.split(".")[-1] not in VALID_EXTENSION:
+        return Response(status=HTTPStatus.BAD_REQUEST)
+    else:
+        # Create a filename
+        filename = secure_filename(request.files['file'].filename)
+        # Save file
+        request.files['file'].save(filename)
+        # Check emotions in image
+        response = check_is_person_sad(image=filename)
+        # Remove file
+        if os.path.exists(filename):
+            os.remove(filename)
+        return Response(status=HTTPStatus.OK, mimetype="application/json") if response else Response(status=HTTPStatus.INTERNAL_SERVER_ERROR)
 
 
 if __name__ == "__main__":
