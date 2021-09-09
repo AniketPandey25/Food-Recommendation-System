@@ -1,1 +1,33 @@
-<mat-toolbar color="primary"> <span>Food Recommendation</span> </mat-toolbar>
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+        <span>Food Recommendation Service</span>
+        <span class="example-spacer"></span>
+        <form class="example-form">
+            <mat-form-field class="example-full-width">
+                <input type="search" matInput>
+            </mat-form-field>
+        </form>
+        <div class="example-button-container">
+            <button mat-mini-fab color="accent">
+                <mat-icon>search</mat-icon>
+            </button>
+        </div>
+    </mat-toolbar-row>
+</mat-toolbar>
+<div class="content">
+    <div fxLayout="row wrap" fxLayoutGap="16px grid">
+        <div fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="33%" *ngFor="let food of foods">
+            <mat-card class="mat-elevation-z4">
+                <mat-card-header>
+                    <img mat-card-avatar src="{{food.image}}">
+                    <mat-card-title>{{food.name}}</mat-card-title>
+                    <mat-card-subtitle>{{food.cuisine}}</mat-card-subtitle>
+                </mat-card-header>
+                <img mat-card-image src="{{food.image}}" alt="Photo of a Shiba Inu">
+                <mat-card-content>
+                    <p></p>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</div>
