@@ -1,11 +1,13 @@
 from http import HTTPStatus
 import os
 from flask import Flask, Response, request, jsonify
+from flask_cors import CORS
 from flask_mongoengine import MongoEngine
 from utility import check_is_person_sad, get_food_from_csv, recommend
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
+CORS(app)
 
 app.config['MONGODB_SETTINGS'] = {
     'host': os.environ['MONGODB_HOST'],
@@ -37,17 +39,19 @@ def load_data_into_database():
         Food(**food).save()
 
 
-# Search food recipe from the database
-# return five matches
+# GET all recipe name
 @app.route("/rest/v1/foods", methods=["GET"])
 def handle_search():
-    recipeName = request.args.get('search')
-    return Response(status=HTTPStatus.NO_CONTENT) if recipeName is None or recipeName == '' else Response(response=Food.objects(name__icontains=recipeName)[:5].to_json(), mimetype="application/json", status=HTTPStatus.OK)
+    return Response(
+        response=Food.objects().to_json(),
+        status=HTTPStatus.OK,
+        mimetype="application/json"
+    )
 
 
 # Recommend food recipe
-@app.route("/rest/v1/foods/<id>", methods=["GET"])
-def handle_recommend(id: str):
+@app.route("/rest/v1/recommendation/<id>", methods=["GET"])
+def handle_recommendation(id: str):
     food = Food.objects.get(id=id)
     return Response(status=HTTPStatus.NOT_FOUND) if not food else jsonify(recommend(food=food, foods=Food.objects.all()))
 
@@ -67,7 +71,7 @@ def handle_upload():
         # Remove file
         if os.path.exists(filename):
             os.remove(filename)
-        return Response(status=HTTPStatus.OK, mimetype="application/json") if response else Response(status=HTTPStatus.INTERNAL_SERVER_ERROR)
+        return jsonify(response) if response else Response(status=HTTPStatus.INTERNAL_SERVER_ERROR)
 
 
 if __name__ == "__main__":

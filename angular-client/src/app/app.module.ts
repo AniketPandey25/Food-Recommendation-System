@@ -8,6 +8,11 @@ import { MatListModule } from '@angular/material/list'
 import { MatCardModule } from '@angular/material/card'
 import { MatGridListModule } from '@angular/material/grid-list'
 import { MatInputModule } from '@angular/material/input'
+import { MatSelectModule } from '@angular/material/select'
+import { BackendService } from './service/backend.service'
+import { HttpClientModule } from '@angular/common/http'
+import { MatAutocompleteModule } from '@angular/material/autocomplete'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AppComponent } from './app.component';
 
 import 'hammerjs'
@@ -25,9 +30,16 @@ import 'hammerjs'
     MatListModule,
     MatGridListModule,
     MatIconModule,
-    MatInputModule
+    MatInputModule,
+    HttpClientModule,
+    MatSelectModule,
+    MatAutocompleteModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    BackendService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

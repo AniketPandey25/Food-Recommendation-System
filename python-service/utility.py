@@ -33,8 +33,7 @@ def get_faces_from_image(image):
 def check_is_person_sad(image):
     try:
         for face in get_faces_from_image(image=image):
-            for emotion in face['Emotions']:
-                return emotion
+            return face['Emotions']
     except (ClientError, Exception) as e:
         logging.error(e)
         return None
@@ -52,7 +51,7 @@ def join_ingredients(ingredients):
 # Recommend food recipe
 def recommend(food, foods):
     return [
-        f for f in foods if percentage_match(food.name, f.name) >= 0.6 and percentage_match(join_ingredients(food.ingredients), join_ingredients(f.ingredients)) >= 0.5
+        f for f in foods if percentage_match(food.name, f.name) >= 0.2 and percentage_match(join_ingredients(food.ingredients), join_ingredients(f.ingredients)) >= 0.4
     ][:5]
 
 

@@ -1,5 +1,7 @@
 export interface Food {
-    id: string;
+    _id: {
+        $oid: string;
+    };
     name: string;
     cookTime: number;
     cuisine: string;

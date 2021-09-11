@@ -4,19 +4,20 @@
         <span class="example-spacer"></span>
         <form class="example-form">
             <mat-form-field class="example-full-width">
-                <input type="search" matInput>
+                <input type="text" aria-label="Number" matInput [formControl]="myControl"
+                    [matAutocomplete]="auto">
+                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onOptionSelected($event.option.value)">
+                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option.name">
+                        {{option.name}}
+                    </mat-option>
+                </mat-autocomplete>
             </mat-form-field>
         </form>
-        <div class="example-button-container">
-            <button mat-mini-fab color="accent">
-                <mat-icon>search</mat-icon>
-            </button>
-        </div>
     </mat-toolbar-row>
 </mat-toolbar>
-<div class="content">
+<div class="content" *ngIf="foods">
     <div fxLayout="row wrap" fxLayoutGap="16px grid">
-        <div fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="33%" *ngFor="let food of foods">
+        <div fxFlex="20%" fxFlex.xs="100%" fxFlex.sm="33%" *ngFor="let food of foods">
             <mat-card class="mat-elevation-z4">
                 <mat-card-header>
                     <img mat-card-avatar src="{{food.image}}">

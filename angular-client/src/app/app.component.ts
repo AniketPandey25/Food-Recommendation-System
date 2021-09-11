@@ -1,48 +1,45 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 import { Food } from './model/food';
+import { BackendService } from './service/backend.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
-  foods: Food[] = [
-    {
-      id: "",
-      name: "Masala Karela Recipe",
-      cookTime: 45,
-      cuisine: "Indian",
-      recipe: [],
-      ingredients: [],
-      image: "https://www.archanaskitchen.com/images/archanaskitchen/1-Author/Pooja_Thakur/Karela_Masala_Recipe-4_1600.jpg"
-    },
-    {
-      id: "",
-      name: "Masala Karela Recipe",
-      cookTime: 45,
-      cuisine: "Indian",
-      recipe: [],
-      ingredients: [],
-      image: "https://www.archanaskitchen.com/images/archanaskitchen/1-Author/Pooja_Thakur/Karela_Masala_Recipe-4_1600.jpg"
-    },
-    {
-      id: "",
-      name: "Masala Karela Recipe",
-      cookTime: 45,
-      cuisine: "Indian",
-      recipe: [],
-      ingredients: [],
-      image: "https://www.archanaskitchen.com/images/archanaskitchen/1-Author/Pooja_Thakur/Karela_Masala_Recipe-4_1600.jpg"
-    },
-    {
-      id: "",
-      name: "Masala Karela Recipe",
-      cookTime: 45,
-      cuisine: "Indian",
-      recipe: [],
-      ingredients: [],
-      image: "https://www.archanaskitchen.com/images/archanaskitchen/1-Author/Pooja_Thakur/Karela_Masala_Recipe-4_1600.jpg"
+export class AppComponent implements OnInit {
+  foods: Food[] = [];
+  myControl = new FormControl();
+  options: Food[] = [];
+  filteredOptions: Observable<Food[]> | undefined;
+
+  constructor(private backendService: BackendService) { }
+
+  ngOnInit() {
+    this.backendService
+      .getRecipe()
+      .subscribe((recipes) => this.options = recipes);
+
+    this.filteredOptions = this.myControl.valueChanges
+      .pipe(
+        map(value => {
+          return this.options.filter(option => option.name.toLowerCase().includes(value.toLowerCase())).slice(0, 5);
+        })
+      );
+  }
+
+  public onOptionSelected(name: string) {
+    const id = this.options.find((option) => option.name == name)?._id.$oid;
+    if (id != undefined) {
+      alert(id);
+      this.backendService
+        .getRecommendation(id)
+        .subscribe(
+          (foods) => this.foods = foods
+        )
     }
-  ];
+  }
 }
