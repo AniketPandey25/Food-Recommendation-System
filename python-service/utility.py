@@ -44,15 +44,32 @@ def percentage_match(string1, string2):
     return SequenceMatcher(isjunk=None, a=string1, b=string2).ratio()
 
 
+# Join list of ingredients to form a string
 def join_ingredients(ingredients):
     return " ".join(ingredients)
 
 
 # Recommend food recipe
+# Return 10 matching recipe
+# and ingredients
 def recommend(food, foods):
-    return [
-        f for f in foods if percentage_match(food.name, f.name) >= 0.2 and percentage_match(join_ingredients(food.ingredients), join_ingredients(f.ingredients)) >= 0.4
-    ][:5]
+    return {
+        "foods": [f for f in foods if percentage_match(food.name, f.name) >= 0.2 and
+                  percentage_match(join_ingredients(
+                      food.ingredients), join_ingredients(f.ingredients)) >= 0.5
+                  ][:9],
+        "majorIngredients": get_major_ingredients(food.ingredients)
+    }
+
+
+# Get major ingredients
+def get_major_ingredients(ingredients):
+    minor_ingredients = ["seed", "salt", "sugar", "powder", "oil"]
+    major_ingredients = []
+    for ingredient in ingredients:
+        if not any([True for minor_ingredient in minor_ingredients if minor_ingredient in ingredient]):
+            major_ingredients.append(ingredient)
+    return major_ingredients
 
 
 # Restructure data

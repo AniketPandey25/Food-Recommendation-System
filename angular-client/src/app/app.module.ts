@@ -13,6 +13,7 @@ import { BackendService } from './service/backend.service'
 import { HttpClientModule } from '@angular/common/http'
 import { MatAutocompleteModule } from '@angular/material/autocomplete'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { AppComponent } from './app.component';
 
 import 'hammerjs'
@@ -35,7 +36,8 @@ import 'hammerjs'
     MatSelectModule,
     MatAutocompleteModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     BackendService

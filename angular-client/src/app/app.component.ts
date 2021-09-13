@@ -15,6 +15,7 @@ export class AppComponent implements OnInit {
   myControl = new FormControl();
   options: Food[] = [];
   filteredOptions: Observable<Food[]> | undefined;
+  loading: boolean = false;
 
   constructor(private backendService: BackendService) { }
 
@@ -34,12 +35,16 @@ export class AppComponent implements OnInit {
   public onOptionSelected(name: string) {
     const id = this.options.find((option) => option.name == name)?._id.$oid;
     if (id != undefined) {
-      alert(id);
+      this.loading = true;
+      this.foods = [];
       this.backendService
         .getRecommendation(id)
         .subscribe(
-          (foods) => this.foods = foods
-        )
+          (foods) => {
+            this.foods = foods;
+            this.loading = false;
+          }
+        );
     }
   }
 }

@@ -1,5 +1,6 @@
 from http import HTTPStatus
 import os
+import logging
 from flask import Flask, Response, request, jsonify
 from flask_cors import CORS
 from flask_mongoengine import MongoEngine
@@ -9,6 +10,7 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 CORS(app)
 
+# Database configuration
 app.config['MONGODB_SETTINGS'] = {
     'host': os.environ['MONGODB_HOST'],
     'username': os.environ['MONGODB_USERNAME'],
@@ -16,11 +18,12 @@ app.config['MONGODB_SETTINGS'] = {
     'db': os.environ['MONGODB_DATABASE']
 }
 
+# Initilize database
 db = MongoEngine()
 db.init_app(app)
 
 
-# # Model class for dataset
+# Model class for dataset
 class Food(db.Document):
     name = db.StringField()
     cookTime = db.IntField()
@@ -39,7 +42,7 @@ def load_data_into_database():
         Food(**food).save()
 
 
-# GET all recipe name
+# GET all food
 @app.route("/rest/v1/foods", methods=["GET"])
 def handle_search():
     return Response(
@@ -50,12 +53,38 @@ def handle_search():
 
 
 # Recommend food recipe
+# If cook time provided will filter out data accordingy
 @app.route("/rest/v1/recommendation/<id>", methods=["GET"])
 def handle_recommendation(id: str):
-    food = Food.objects.get(id=id)
-    return Response(status=HTTPStatus.NOT_FOUND) if not food else jsonify(recommend(food=food, foods=Food.objects.all()))
+    try:
+        # Check for query parameter
+        cookTime = request.args.get('cookTime')
+        # Get the selected food recipe
+        food = Food.objects.get(id=id)
+        # If invalid food recipe
+        if not food:
+            return Response(status=HTTPStatus.NOT_FOUND)
+        # If cook time given
+        if cookTime:
+            # Cook time between 20 to 60 inclusive
+            if '-' in cookTime:
+                [lowerLimit, upperLimit] = map(int, cookTime.split('-'))
+                return jsonify(recommend(food=food, foods=Food.objects(cookTime__gte=lowerLimit, cookTime__lte=upperLimit)))
+            # Cook time < 20
+            elif int(cookTime) == 20:
+                return jsonify(recommend(food=food, foods=Food.objects(cookTime__lt=20)))
+            # Cook time > 60
+            else:
+                return jsonify(recommend(food=food, foods=Food.objects(cookTime__gt=60)))
+        else:
+            return jsonify(recommend(food=food, foods=Food.objects()))
+    except Exception as e:
+        logging.error(e)
+        return Response(status=HTTPStatus.INTERNAL_SERVER_ERROR)
 
 
+# Handle file upload
+# Suggest food on basis of emotion
 @app.route("/rest/v1/upload", methods=["POST"])
 def handle_upload():
     VALID_EXTENSION = ["jpg", "png"]
