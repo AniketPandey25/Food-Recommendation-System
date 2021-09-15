@@ -1,0 +1,19 @@
+<mat-grid-list cols="3" rowHeight="100px" *ngIf="recommendation">
+    <mat-grid-tile *ngFor="let food of filteredRecommendation | async">
+        <mat-card-header>
+            <img mat-card-avatar src="{{food.image}}">
+        </mat-card-header>
+        <mat-card class="mat-elevation-z4">
+            {{food.name | slice:0:25}}
+        </mat-card>
+    </mat-grid-tile>
+</mat-grid-list>
+<mat-grid-list cols="5" rowHeight="100px" *ngIf="recommendation">
+    <mat-selection-list (selectionChange)="onSelectionChange($event)">
+        <mat-grid-tile *ngFor="let ingredient of recommendation.majorIngredients">
+            <mat-list-option [value]="ingredient">
+                {{ingredient}}
+            </mat-list-option>
+        </mat-grid-tile>
+    </mat-selection-list>
+</mat-grid-list>

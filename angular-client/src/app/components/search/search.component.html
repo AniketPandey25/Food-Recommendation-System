@@ -1,0 +1,33 @@
+<div class="content">
+    <form>
+        <mat-grid-list cols="2" rowHeight="100px">
+            <mat-grid-tile>
+                <mat-form-field appearance="outline" class="example-full-width">
+                    <mat-label>Cook time</mat-label>
+                    <mat-select [formControl]="cookTimeFormControl">
+                        <mat-option value="20">less than 20</mat-option>
+                        <mat-option value="20-40">20-40</mat-option>
+                        <mat-option value="40-60">40-60</mat-option>
+                        <mat-option value="60">more than 60</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field appearance="outline" class="example-full-width">
+                    <mat-label>Favourite Recipe</mat-label>
+                    <input matInput [formControl]="searchBoxFormControl" [matAutocomplete]="auto">
+                    <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
+                        (optionSelected)=onOptionSelected($event)>
+                        <mat-option *ngFor="let option of filteredFoodRecipe | async" [value]="option.name">
+                            {{option.name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </form>
+</div>
+<div class="content">
+    <app-recommendation [parentSubject]="parentSubject"></app-recommendation>
+</div>
