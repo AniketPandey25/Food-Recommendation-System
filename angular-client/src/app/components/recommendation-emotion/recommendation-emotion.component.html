@@ -1,0 +1,14 @@
+<div *ngIf="foods">
+    <h2>Don't be sad.Try these!</h2>
+</div>
+<mat-grid-list cols="3" rowHeight="100px" *ngIf="foods">
+    <mat-grid-tile *ngFor="let food of foods" (click)=onFoodSelect(food)>
+        <mat-card-header>
+            <img mat-card-avatar src="{{food.image}}">
+        </mat-card-header>
+        <mat-card class="mat-elevation-z4">
+            {{food.name | slice:0:25}}
+        </mat-card>
+    </mat-grid-tile>
+</mat-grid-list>
+<app-selected-recipe *ngIf="selectedFood" [selectedFood]="selectedFood"></app-selected-recipe>

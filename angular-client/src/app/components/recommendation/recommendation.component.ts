@@ -12,6 +12,7 @@ import { Food } from 'src/app/models/food';
   styleUrls: ['./recommendation.component.scss']
 })
 export class RecommendationComponent implements OnInit {
+  selectedFood: Food | undefined;
   recommendation!: Recommendation;
   checkBoxFormControl = new FormControl();
   filteredRecommendation!: Observable<Food[]>;
@@ -76,4 +77,7 @@ export class RecommendationComponent implements OnInit {
     console.log(this.selectedIngredients);
   }
 
+  public onFoodSelect(food: Food): void {
+    this.selectedFood = food;
+  }
 }

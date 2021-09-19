@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatInputModule } from '@angular/material/input';
 import { BrowserModule } from '@angular/platform-browser';
 import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -16,6 +17,8 @@ import { SearchComponent } from './components/search/search.component';
 import { BackendService } from 'src/app/services/backend/backend.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RecommendationComponent } from './components/recommendation/recommendation.component';
+import { SelectedRecipeComponent } from './components/selected-recipe/selected-recipe.component';
+import { RecommendationEmotionComponent } from './components/recommendation-emotion/recommendation-emotion.component';
 
 
 
@@ -23,7 +26,9 @@ import { RecommendationComponent } from './components/recommendation/recommendat
   declarations: [
     AppComponent,
     SearchComponent,
-    RecommendationComponent
+    SelectedRecipeComponent,
+    RecommendationComponent,
+    RecommendationEmotionComponent
   ],
   imports: [
     FormsModule,
@@ -33,6 +38,7 @@ import { RecommendationComponent } from './components/recommendation/recommendat
     MatListModule,
     MatInputModule,
     MatSelectModule,
+    MatButtonModule,
     HttpClientModule,
     MatToolbarModule,
     MatGridListModule,

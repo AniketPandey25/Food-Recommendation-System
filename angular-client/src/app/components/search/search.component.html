@@ -1,6 +1,6 @@
 <div class="content">
     <form>
-        <mat-grid-list cols="2" rowHeight="100px">
+        <mat-grid-list cols="3" rowHeight="100px">
             <mat-grid-tile>
                 <mat-form-field appearance="outline" class="example-full-width">
                     <mat-label>Cook time</mat-label>
@@ -25,9 +25,21 @@
                     </mat-autocomplete>
                 </mat-form-field>
             </mat-grid-tile>
+            <mat-grid-tile>
+                <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+                <div class="file-upload">
+                    <button mat-fab color="primary"  (click)="fileUpload.click()">
+                        <mat-icon>insert_photo</mat-icon>
+                    </button>
+                </div>
+            </mat-grid-tile>
         </mat-grid-list>
     </form>
 </div>
 <div class="content">
     <app-recommendation [parentSubject]="parentSubject"></app-recommendation>
+</div>
+<div class="content">
+    <app-recommendation-emotion [recommendationEmotionSubject]="recommendationEmotionSubject">
+    </app-recommendation-emotion>
 </div>

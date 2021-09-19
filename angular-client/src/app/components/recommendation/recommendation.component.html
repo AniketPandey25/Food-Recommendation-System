@@ -1,5 +1,8 @@
+<div *ngIf="recommendation">
+    <h2>Based on your choice, you might also like these!</h2>
+</div>
 <mat-grid-list cols="3" rowHeight="100px" *ngIf="recommendation">
-    <mat-grid-tile *ngFor="let food of filteredRecommendation | async">
+    <mat-grid-tile *ngFor="let food of filteredRecommendation | async" (click)=onFoodSelect(food)>
         <mat-card-header>
             <img mat-card-avatar src="{{food.image}}">
         </mat-card-header>
@@ -17,3 +20,4 @@
         </mat-grid-tile>
     </mat-selection-list>
 </mat-grid-list>
+<app-selected-recipe *ngIf="selectedFood" [selectedFood]="selectedFood"></app-selected-recipe>

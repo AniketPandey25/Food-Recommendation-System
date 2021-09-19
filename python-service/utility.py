@@ -8,8 +8,10 @@ from difflib import SequenceMatcher
 DATASET = "dataset.csv"
 
 
-# Get client
 def get_client():
+    """
+        Create low-level service client by name.
+    """
     return boto3.client(
         service_name="rekognition",
         region_name="ap-south-1",
@@ -18,9 +20,15 @@ def get_client():
     )
 
 
-# Use AWS Rekognition to find out emotion
-# for an image
 def get_faces_from_image(image):
+    """
+        AWS Rekognition
+
+        :type image: File
+        :param image: Image
+
+        :return Any
+    """
     with open(file=image, mode='rb') as image:
         return get_client().detect_faces(
             Image={
@@ -29,14 +37,26 @@ def get_faces_from_image(image):
         )["FaceDetails"]
 
 
-# Check is person Sad
-def check_is_person_sad(image):
+def get_emotions(image):
+    """
+        Retrieve emotion from image
+
+        :type image: File
+        :param image: Image
+
+        :return list
+    """
     try:
         for face in get_faces_from_image(image=image):
             return face['Emotions']
     except (ClientError, Exception) as e:
         logging.error(e)
         return None
+
+
+def check_if_sad(image):
+    emotion = get_emotions(image=image)
+    return emotion[0]['Type'] in ['SAD', 'ANGRY', 'FEAR'] if emotion else False
 
 
 # Match percentage for two string
@@ -60,6 +80,50 @@ def recommend(food, foods):
                   ][:9],
         "majorIngredients": get_major_ingredients(food.ingredients)
     }
+
+
+def check_food_edible_when_sad(food):
+    """
+        Check if food recipe edible when feeling sad.
+
+        :type food: Food
+        :param food: Food object
+
+        :return bool
+    """
+    ingredients_to_take_when_sad = [
+        "chocolate",
+        "fish",
+        "avacado"
+        "yogurt",
+        "orange",
+        "spinach",
+        "brazil nuts",
+        "beans",
+        "peas",
+        "berries",
+        "almonds",
+        "brocoli"
+    ]
+    for ingredient_to_take_when_sad in ingredients_to_take_when_sad:
+        return any(
+            [
+                True for ingredient in food.ingredients if ingredient_to_take_when_sad in ingredient.lower()
+            ]
+        )
+    return False
+
+
+def recommend_for_sad(foods):
+    """
+        Recommend food recipe for feeling SAD
+
+        :type foods: List[Food]
+        :param foods: Collection Food
+
+        :return list[Food]
+    """
+    return [food for food in foods if check_food_edible_when_sad(food)][:5]
 
 
 # Get major ingredients

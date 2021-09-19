@@ -38,4 +38,13 @@ export class BackendService {
       params: new HttpParams().set('cookTime', cookTime)
     });
   }
+
+  /**
+   * 
+   * @param formData 
+   * @returns 
+   */
+  public uploadImage(formData: FormData): Observable<Food[]> {
+    return this.httpClient.post<Food[]>("http://localhost:5000/rest/v1/upload", formData);
+  }
 }

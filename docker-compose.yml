@@ -36,9 +36,9 @@ services:
             MONGODB_USERNAME: "AniketPandey"
             MONGODB_PASSWORD: "Aniket@19970925"
             MONGODB_DATABASE: "admin"
-            AWS_ACCESS_KEY_ID: "<aws_access_key_id>"
-            AWS_SECRET_ACCESS_KEY: "<aws_secret_access_key>"
-        depends_on: 
+            AWS_ACCESS_KEY_ID: "AKIA5ODEXX727S6JYGXP"
+            AWS_SECRET_ACCESS_KEY: "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"
+        depends_on:
             - mongodb
         networks:
             - frontend

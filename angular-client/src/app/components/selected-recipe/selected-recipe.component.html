@@ -1,0 +1,22 @@
+<mat-grid-list cols="3" rowHeight="400px" *ngIf="selectedFood">
+    <mat-grid-tile>
+        <mat-card class="mat-elevation-z4">
+            <img mat-card-image src="{{selectedFood.image}}" alt="{{selectedFood.name}}">
+        </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <mat-card-content class="scrollable-content">
+            <mat-list>
+                <mat-list-item *ngFor="let ingredient of selectedFood.ingredients">
+                    <mat-icon matListIcon>lens</mat-icon>
+                    {{ingredient}}
+                </mat-list-item>
+            </mat-list>
+        </mat-card-content>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <mat-card-content class="scrollable-content">
+            <p>{{selectedFood.recipe}}</p>
+        </mat-card-content>
+    </mat-grid-tile>
+</mat-grid-list>

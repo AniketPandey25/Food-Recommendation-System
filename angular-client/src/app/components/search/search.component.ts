@@ -16,6 +16,7 @@ export class SearchComponent implements OnInit {
   filteredFoodRecipe: Observable<Food[]> | undefined;
   cookTimeFormControl: FormControl = new FormControl();
   searchBoxFormControl: FormControl = new FormControl();
+  recommendationEmotionSubject: Subject<any> = new Subject();
 
   constructor(private backendService: BackendService) { }
 
@@ -42,6 +43,14 @@ export class SearchComponent implements OnInit {
       'cookTime': cookTime,
       'selectedRecipeId': selectedRecipeId
     });
+  }
+
+  /**
+   * 
+   * @param event 
+   */
+  public onFileSelected(event: any): void {
+    this.recommendationEmotionSubject.next(event.target.files[0]);
   }
 
 }

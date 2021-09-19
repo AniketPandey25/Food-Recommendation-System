@@ -4,7 +4,7 @@ import logging
 from flask import Flask, Response, request, jsonify
 from flask_cors import CORS
 from flask_mongoengine import MongoEngine
-from utility import check_is_person_sad, get_food_from_csv, recommend
+from utility import check_if_sad, get_food_from_csv, recommend, recommend_for_sad
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
@@ -18,13 +18,16 @@ app.config['MONGODB_SETTINGS'] = {
     'db': os.environ['MONGODB_DATABASE']
 }
 
-# Initilize database
+# # Initilize database
 db = MongoEngine()
 db.init_app(app)
 
 
 # Model class for dataset
 class Food(db.Document):
+    """
+        Document
+    """
     name = db.StringField()
     cookTime = db.IntField()
     cuisine = db.StringField()
@@ -87,20 +90,29 @@ def handle_recommendation(id: str):
 # Suggest food on basis of emotion
 @app.route("/rest/v1/upload", methods=["POST"])
 def handle_upload():
+    """
+        Suggest food recipe on the basis of mood.
+    """
     VALID_EXTENSION = ["jpg", "png"]
+    response = None
     if request.files['file'].filename == '' or request.files['file'].filename.split(".")[-1] not in VALID_EXTENSION:
         return Response(status=HTTPStatus.BAD_REQUEST)
     else:
         # Create a filename
         filename = secure_filename(request.files['file'].filename)
+
         # Save file
         request.files['file'].save(filename)
+
         # Check emotions in image
-        response = check_is_person_sad(image=filename)
+        if check_if_sad(image=filename):
+            response = recommend_for_sad(foods=Food.objects())
+
         # Remove file
         if os.path.exists(filename):
             os.remove(filename)
-        return jsonify(response) if response else Response(status=HTTPStatus.INTERNAL_SERVER_ERROR)
+
+        return jsonify(response) if response else Response(status=HTTPStatus.NO_CONTENT)
 
 
 if __name__ == "__main__":
