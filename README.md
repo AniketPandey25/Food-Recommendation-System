@@ -75,3 +75,6 @@ If the service is developed further there are a few changes that could possibly 
 - https://angular.io/guide/inputs-outputs
 - https://stackoverflow.com/questions/39738974/emit-event-from-parent-to-child
 - https://www.kaggle.com/sooryaprakash12/cleaned-indian-recipes-dataset
+
+# Issue in the last review
+ Python backend service timed out. To solve this problem I changed `gunicorn --bind 0.0.0.0:5000 app:app` to `gunicorn --bind 0.0.0.0:5000 --timeout 300 app:app` https://stackoverflow.com/questions/10855197/gunicorn-worker-timeout-error
