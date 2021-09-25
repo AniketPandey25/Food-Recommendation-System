@@ -74,3 +74,4 @@ If the service is developed further there are a few changes that could possibly 
 - https://material.angular.io/components/button/overview
 - https://angular.io/guide/inputs-outputs
 - https://stackoverflow.com/questions/39738974/emit-event-from-parent-to-child
+- https://www.kaggle.com/sooryaprakash12/cleaned-indian-recipes-dataset
