@@ -29,9 +29,27 @@ It's a food recommendation app that gives you various recipes based on your sear
 
 # Test Service
 Please wait for 10-20 seconds before searching for recipes once you open http://localhost:8080. Please pick the option only from the dropdown menu after searching.
+## Search Recipe
+- Search for recipe in search box by entering keywords.
+
+![Search Demo](https://jtp-technical-project-bucket.s3.ap-south-1.amazonaws.com/images/search.png)
 ## Select Recipe
+- Select recipe from search box
+- Wait for 15-20 seconds to get recommendation
+
+![Select Recipe Demo](https://jtp-technical-project-bucket.s3.ap-south-1.amazonaws.com/images/select_recipe.png)
 ## Select Recipe and Cook Time
+- Select recipe and cook time from search box
+- Wait for 15-20 seconds to get recommendation
+
+![Select Recipe and Cook time Demo](https://jtp-technical-project-bucket.s3.ap-south-1.amazonaws.com/images/select_recipe_cooktime.png)
 ## Upload an Image
+You can upload an image of yours which should be in **png** or **jpg** format only and if the system finds that you are **upset** then it will suggest you some recipe otherwise it won't return any result.
+
+![Upload Image Demo](https://jtp-technical-project-bucket.s3.ap-south-1.amazonaws.com/images/upload_image.png)
+## Demo
+The demo given below would help you go through the process with ease.
+[Demo](https://jtp-technical-project-bucket.s3.ap-south-1.amazonaws.com/videos/demo_functionality.mkv)
 
 # Stop Service
 1. Change directory
