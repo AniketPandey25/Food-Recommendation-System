@@ -28,7 +28,7 @@ services:
             context: python-service
             dockerfile: Dockerfile
         container_name: python-service
-        command: gunicorn --bind 0.0.0.0:5000 app:app
+        command: gunicorn --bind 0.0.0.0:5000 --timeout 300 app:app
         ports:
             - "5000:5000"
         environment:

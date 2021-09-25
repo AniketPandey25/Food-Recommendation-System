@@ -1,6 +1,7 @@
 import os
 import csv
 import boto3
+import random
 import logging
 from botocore.exceptions import ClientError
 from difflib import SequenceMatcher
@@ -55,24 +56,52 @@ def get_emotions(image):
 
 
 def check_if_sad(image):
+    """
+        Check if found SAD or ANGRY or FEARFUL
+
+        :type image: File
+        :param image: Image
+
+        :return bool
+    """
     emotion = get_emotions(image=image)
     return emotion[0]['Type'] in ['SAD', 'ANGRY', 'FEAR'] if emotion else False
 
 
-# Match percentage for two string
 def percentage_match(string1, string2):
+    """
+        Get percentage match between two strings
+
+        :return float
+    """
     return SequenceMatcher(isjunk=None, a=string1, b=string2).ratio()
 
 
-# Join list of ingredients to form a string
 def join_ingredients(ingredients):
+    """
+        Join each element present in the list by \s
+        to create a string
+
+        :type ingredients: list
+        :param ingredients: List of ingredients
+
+        :return str
+    """
     return " ".join(ingredients)
 
 
-# Recommend food recipe
-# Return 10 matching recipe
-# and ingredients
 def recommend(food, foods):
+    """
+        Get recommendation
+
+        :type food: Food
+        :param food: Food recipe selected
+
+        :type foods: [Food]
+        :param foods: All availabe food recipe
+
+        :return dict[str, list] 
+    """
     return {
         "foods": [f for f in foods if percentage_match(food.name, f.name) >= 0.2 and
                   percentage_match(join_ingredients(
@@ -123,11 +152,18 @@ def recommend_for_sad(foods):
 
         :return list[Food]
     """
-    return [food for food in foods if check_food_edible_when_sad(food)][:5]
+    return random.sample(population=[food for food in foods if check_food_edible_when_sad(food)], k=5)
 
 
-# Get major ingredients
 def get_major_ingredients(ingredients):
+    """
+        Get major ingredients
+
+        This method will remove all the minor ingredients
+        like salt, sugar etc
+
+        :return list
+    """
     minor_ingredients = ["seed", "salt", "sugar", "powder", "oil"]
     major_ingredients = []
     for ingredient in ingredients:
@@ -136,8 +172,15 @@ def get_major_ingredients(ingredients):
     return major_ingredients
 
 
-# Restructure data
 def get_dict(row):
+    """
+        Get dict from csv row
+
+        :type row: list
+        :param row: All fields from csv
+
+        :return dict[str, Any]
+    """
     return {
         "name": row[0],
         "cookTime": row[2],
@@ -148,8 +191,12 @@ def get_dict(row):
     }
 
 
-# Load data from csv
 def get_food_from_csv():
+    """
+        Get data from dataset
+
+        :return list
+    """
     data = []
     with open(DATASET, 'r') as file:
         csvReader = csv.reader(file)
