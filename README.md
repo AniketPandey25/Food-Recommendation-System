@@ -1,5 +1,5 @@
 # FOOD RECOMMENDATION SERVICE
-It's a food recommendation app that gives you various recipes based on your search and demand. Just put your though in the search bar and you will have more recipes realted to it. Also, if your day is not going that good just put in a picture of yourself and it will give you recipes to lighten your mood.
+It's a food recommendation app that gives you various recipes based on your search and demand. Just put your thought in the search bar and you will have more recipes realted to it. Also, if your day is not going that good just put in a picture of yourself and it will give you recipes to lighten your mood.
 
 # Prerequisite
 1. Install Git https://git-scm.com/downloads
