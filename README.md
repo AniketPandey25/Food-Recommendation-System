@@ -1,5 +1,5 @@
 # FOOD RECOMMENDATION SERVICE
-It's a food recommendation app that gives you various recipes based on your search and demand. Just put your thought in the search bar and you will have more recipes realted to it. Also, if your day is not going that good just put in a picture of yourself and it will give you recipes to lighten your mood.
+It's a food recommendation app that gives you various recipes based on your search and demand. Just put your thought in the search bar and you will have more recipes related to it. Also, if your day is not going that good just put in a picture of yourself and it will give you recipes to lighten your mood.
 
 # Prerequisite
 1. Install Git https://git-scm.com/downloads
@@ -59,7 +59,7 @@ The demo given below would help you go through the process with ease.
 `docker-compose down --volumes`
 
 # Future Work
-If the service is developed further there are a few changes that could possibly enhance its performance such as implementing some kind of caching machenism for backend and frontend and machine learning can be used to provide more accurate recommendation.
+If the service is developed further there are a few changes that could possibly enhance its performance such as implementing some kind of caching mechanism for backend and frontend and machine learning can be used to provide more accurate recommendation.
 
 # References
 - https://docs.mongoengine.org/apireference.html
